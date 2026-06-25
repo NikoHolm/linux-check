@@ -34,7 +34,7 @@ cd linux-check
 Make the script executable:
 
 ```bash
-chmod +x main.sh
+chmod +x linux.check.sh
 ```
 
 Run:

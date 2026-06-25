@@ -1,14 +1,29 @@
 #!/bin/bash
 
 showStorage() {
-  echo "You have this much storage left" 
+
   df -h / | awk 'NR==2 {print "Storage information" "\n Free: " $4"  \n Total: " $2 " \n Used: " $5 }'
   read -p "Press Enter to continue..."
 }
 
 showRam() {
-  echo "You have ram left:"
+
   free -h | awk 'NR==2 {print "RAM information" "\n Free: " $4"  \n Total: " $2 " \n Used: " $3 }'
+  read -p "Press Enter to continue..."
+}
+
+showCpu() {
+
+  lscpu | awk -F: '
+/Model name/ {model=$2}
+/Architecture/ {arch=$2}
+/^CPU\(s\)/ {cpus=$2}
+END {
+  print "CPU information"
+  print "Model:" model
+  print "Architecture:" arch
+  print "CPU(s):" cpus
+}'
   read -p "Press Enter to continue..."
 }
 
@@ -58,22 +73,21 @@ echo "Linux Check"
 echo
 echo "1. Storage"
 echo "2. RAM"
-echo "3. Kernel"
-echo "4. Uptime"
-echo "5. Update your system"
-echo "6. Exit"
+echo "3. CPU"
+echo "4. Kernel"
+echo "5. Uptime"
+echo "6. Update your system"
+echo "7. Exit"
 
-
-
-
-read -p "Press number 1-6: " input
-case $input in 
+read -p "Press number 1-7: " input
+case $input in
   1) showStorage ;;
   2) showRam ;;
-  3) showKernel ;;
-  4) showUptime ;;
-  5) showUpdate ;;
-  6) showExit ;;
-  *) echo "Invalid input. Please enter a number between 1 and 6." ;;
+  3) showCpu ;;
+  4) showKernel ;;
+  5) showUptime ;;
+  6) showUpdate ;;
+  7) showExit ;;
+  *) echo "Invalid input. Please enter a number between 1 and 7." ;;
 esac
 done

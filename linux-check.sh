@@ -1,41 +1,46 @@
 #!/bin/bash
+pause() {
+  # every test pause function will be called after the test is completed to allow the user to read the output before returning to the main menu.
+  read -p "Press Enter to continue..."
+}
+
 
 showStorage() {
 
-  df -h / | awk 'NR==2 {print "Storage information" "\n Free: " $4"  \n Total: " $2 " \n Used: " $5 }'
-  read -p "Press Enter to continue..."
+  df -BG / | awk 'NR==2 {print "Storage information" "\n Free: " $4"  \n Total: " $2 " \n Used: " $5 }'
+  
 }
 
 showRam() {
 
   free -h | awk 'NR==2 {print "RAM information" "\n Free: " $4"  \n Total: " $2 " \n Used: " $3 }'
-  read -p "Press Enter to continue..."
+  
 }
 
 showCpu() {
 
   lscpu | awk -F: '
-/Model name/ {model=$2}
-/Architecture/ {arch=$2}
-/^CPU\(s\)/ {cpus=$2}
+  /Model name/ {model=$2}
+  /Architecture/ {arch=$2}
+  /^CPU\(s\)/ {cpus=$2}
 END {
   print "CPU information"
   print "Model:" model
   print "Architecture:" arch
   print "CPU(s):" cpus
 }'
-  read -p "Press Enter to continue..."
+ 
 }
 
 showKernel() {
   echo "Your kernel version"
   uname -r
-  read -p "Press Enter to continue..."
+  
 }
 
 showUptime() {
   uptime -p | sed 's/^up //'
-  read -p "Press Enter to continue..."
+  
 }
 
 showUpdate() {
@@ -48,9 +53,9 @@ This will update your entire system."
       sudo pacman -Syu
   else
       echo "Update cancelled."
-      read -p "Press Enter to continue..."
   fi
 }
+
 showExit() {
   exit
 }
@@ -81,13 +86,19 @@ echo "7. Exit"
 
 read -p "Press number 1-7: " input
 case $input in
-  1) showStorage ;;
-  2) showRam ;;
-  3) showCpu ;;
-  4) showKernel ;;
-  5) showUptime ;;
-  6) showUpdate ;;
-  7) showExit ;;
+  1) showStorage 
+      pause;;
+  2) showRam 
+      pause;;
+  3) showCpu 
+      pause;;
+  4) showKernel 
+      pause;;
+  5) showUptime 
+      pause;;
+  6) showUpdate 
+      pause;;
+  7) showExit
   *) echo "Invalid input. Please enter a number between 1 and 7." ;;
 esac
 done

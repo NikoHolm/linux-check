@@ -34,19 +34,19 @@ cd linux-check
 Make the script executable:
 
 ```bash
-chmod +x linux.check.sh
+chmod +x linux-check.sh
 ```
 
 Run:
 
 ```bash
-./main.sh
+./linux-check.sh
 ```
 
 
 ## Roadmap
 
-- [ ] CPU information
+- [X] CPU information
 - [ ] Battery information
 - [ ] Network information
 - [ ] Better UI

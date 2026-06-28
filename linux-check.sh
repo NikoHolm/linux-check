@@ -18,8 +18,16 @@ getStorage() {
   df -h / | awk 'NR==2 {print $2, $3, $4}'
 }
 
+getStorageFreeNumber() {
+  df -BG / | awk 'NR==2 {gsub("G", "", $4); print $4}'
+}
+
 getRamInfo() {
-  free -h | awk 'NR==2 {print $2, $3, $4}'
+  free -h | awk 'NR==2 {print $2, $3, $7}'
+}
+
+getFreeRamNumber() {
+   free -g | awk 'NR==2 {print $7}'
 }
 
 getHostName() {
@@ -38,7 +46,28 @@ getCpuInfo() {
   }'
 }
 
+#Functions for health check
 
+checkStorage() {
+  free=$(getStorageFreeNumber)
+
+  if [ "$free" -ge 30 ]; then
+    echo "Storage: OK - ${free}G free"
+  else
+    echo "Storage: FAILED - only ${free}G free"
+  fi
+}
+
+checkRam() {
+  mapfile -t ramInfo < <(getFreeRamNumber)
+  freeRam=${ramInfo[0]}
+
+  if [ "$freeRam" -ge 4 ]; then
+    echo "RAM: OK - ${freeRam}G free"
+  else
+    echo "RAM: FAILED - only ${freeRam}G free"
+  fi
+}
 
 # Display functions
 
@@ -100,6 +129,8 @@ This will update your entire system."
 runHealthCheck() {
   echo "Running health check..."
   
+  checkStorage
+  checkRam
 
   echo "Health check completed."
   

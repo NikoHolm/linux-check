@@ -69,6 +69,25 @@ checkRam() {
   fi
 }
 
+checkFailedServices() {
+    failed=$(systemctl --failed --no-legend | wc -l)
+
+    if [ "$failed" -eq 0 ]; then
+        echo "Services: OK"
+    else
+        echo "Services: FAILED ($failed failed services)"
+    fi
+}
+
+checkInternetConnection() {
+    if ping -c 1 archlinux.org &> /dev/null; then
+        echo "Internet Connection: OK"
+    else
+        echo "Internet Connection: FAILED"
+    fi
+
+}
+
 # Display functions
 
 showStorage() {
@@ -81,12 +100,12 @@ showStorage() {
 }
 
 showRam() {
-  mapfile -t ramInfo < <(getRamInfo)
+  read total used free <<< "$(getRamInfo)"
 
   echo "RAM Information"
-  echo "Free:  ${ramInfo[0]}"
-  echo "Total: ${ramInfo[1]}"
-  echo "Used:  ${ramInfo[2]}"
+  echo "Free:  $free"
+  echo "Total: $total"
+  echo "Used:  $used"
 }
 
 showCpu() {
@@ -97,7 +116,6 @@ showCpu() {
   echo "Architecture: ${cpuInfo[1]}"
   echo "CPU(s): ${cpuInfo[2]}"
 }
-
 
 
 showKernel() {
@@ -128,10 +146,10 @@ This will update your entire system."
 
 runHealthCheck() {
   echo "Running health check..."
-  
   checkStorage
   checkRam
-
+  checkFailedServices
+  checkInternetConnection
   echo "Health check completed."
   
 }
@@ -160,7 +178,7 @@ clear
 
 echo "========================"
 echo "      Linux Check"
-echo "        v0.2.5 Beta"
+echo "        v0.3 Beta"
 echo "========================"
 echo
 
@@ -178,6 +196,9 @@ echo "8. Show System Information"
 echo "0. Exit"
 
 read -p "Press number 0-8: " input
+
+clear
+
 case $input in
   1) showStorage 
       pause;;

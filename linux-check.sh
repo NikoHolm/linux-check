@@ -80,13 +80,21 @@ checkFailedServices() {
 }
 
 checkInternetConnection() {
-    if ping -c 1 archlinux.org &> /dev/null; then
-        echo "Internet Connection: OK"
+
+    if ping -c 1 1.1.1.1 &> /dev/null; then
+        echo "Internet: OK"
     else
-        echo "Internet Connection: FAILED"
+        echo "Internet: FAILED"
+        return
     fi
 
+    if ping -c 1 google.com &> /dev/null; then
+        echo "DNS: OK"
+    else
+        echo "DNS: FAILED"
+    fi
 }
+
 
 # Display functions
 

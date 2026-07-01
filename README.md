@@ -31,23 +31,19 @@ chmod +x linux-check.sh
 
 ## How it works
 
-The whole program lives in one file, `linux-check.sh`, split into six clearly
-labeled sections (the comments in the file mark each one):
+The app is split into small Bash modules inside `src/`:
 
-1. **THEME** - every color in one place. Change a value here and the whole app
-   re-skins. Colors are auto-disabled when not in a terminal.
-2. **UI LIBRARY** - the reusable drawing helpers. You almost never edit these;
-   you just call them. The important ones:
-   - `screen_header` - clears the screen and draws the logo
-   - `ui_top "TITLE"` / `ui_bottom` - open and close a panel
-   - `ui_kv "Label" "value"` - a "label  value" row
-   - `ui_status "Label" ok|warn|fail "detail"` - a row with a colored badge
-   - `ui_menu N "Label" "description"` - a menu entry
-3. **DATA** - `get*` functions that only collect raw values. No printing.
-4. **HEALTH** - `check*` functions that judge a value as OK / WARN / FAIL.
-5. **SCREENS** - `show*` / `run*` functions that draw a full screen using the
-   UI helpers.
-6. **MENU LOOP** - the main menu and the `case` that runs your choice.
+```text
+linux-check/
+├── linux-check.sh     # Entry point
+└── src/
+    ├── theme.sh       # Colors and theme setup
+    ├── ui.sh          # Reusable TUI drawing helpers
+    ├── data.sh        # Raw system information
+    ├── health.sh      # OK / WARN / FAIL checks
+    ├── screens.sh     # Full application screens
+    └── menu.sh        # Main menu loop
+```
 
 The golden rule: **data functions never print, screen functions never compute.**
 Keeping those separate is what makes the app easy to grow.
@@ -56,7 +52,7 @@ Keeping those separate is what makes the app easy to grow.
 
 Say you want to add **Battery** info. You touch three places.
 
-**1. Add a data function** (section DATA) - just return the raw value:
+**1. Add a data function** (`src/data.sh`) - just return the raw value:
 
 ```bash
 getBattery() {
@@ -64,7 +60,7 @@ getBattery() {
 }
 ```
 
-**2. Add a screen function** (section SCREENS) - draw it with the helpers:
+**2. Add a screen function** (`src/screens.sh`) - draw it with the helpers:
 
 ```bash
 showBattery() {
@@ -75,13 +71,15 @@ showBattery() {
 }
 ```
 
-**3. Wire it into the menu** (section MENU LOOP) - one line in `mainMenu`:
+**3. Add it to the menu** (`src/menu.sh`):
+
+Add a menu entry:
 
 ```bash
 ui_menu 9 "Battery" "charge level"
 ```
 
-and one line in the `case`:
+and handle the new option in the `case` statement:
 
 ```bash
 9) showBattery ; pause ;;
@@ -115,4 +113,4 @@ Then call `checkBattery` from inside `runHealthCheck`.
 - [ ] Battery information
 - [ ] Network information
 - [ ] macOS support
-- [ ] Windows version
+- [ ] Windows support

@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # ----------------------------------------------------------------------------
-# 1. THEME  (Tokyo Night palette, 24-bit color)
+# THEME  (Tokyo Night palette, 24-bit color)
 # ----------------------------------------------------------------------------
 # Change a value here and it changes everywhere. Colors are disabled
 # automatically when output is not a terminal, or when NO_COLOR is set.

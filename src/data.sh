@@ -2,7 +2,7 @@
 
 
 # ----------------------------------------------------------------------------
-# 3. DATA  (collect raw values only - no printing, no judging)
+# DATA  (collect raw values only - no printing, no judging)
 # ----------------------------------------------------------------------------
 
 getKernelVersion() { uname -r; }

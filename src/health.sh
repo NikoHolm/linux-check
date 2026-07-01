@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # ----------------------------------------------------------------------------
-# 4. HEALTH  (turn a raw value into an OK / WARN / FAIL row)
+# HEALTH  (turn a raw value into an OK / WARN / FAIL row)
 # ----------------------------------------------------------------------------
 
 checkStorage() {

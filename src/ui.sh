@@ -2,7 +2,7 @@
 #!/bin/bash
 
 # ----------------------------------------------------------------------------
-# 2. UI LIBRARY  (the drawing helpers every screen is built from)
+# UI LIBRARY  (the drawing helpers every screen is built from)
 # ----------------------------------------------------------------------------
 
 # Visible length of a string, ignoring color escape codes (so padding lines up).

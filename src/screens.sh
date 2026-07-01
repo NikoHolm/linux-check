@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # ----------------------------------------------------------------------------
-# 5. SCREENS  (draw a full panel using the helpers above)
+# SCREENS  (draw a full panel using the helpers above)
 # ----------------------------------------------------------------------------
 
 showStorage() {
